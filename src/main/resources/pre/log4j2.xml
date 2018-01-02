@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Properties>
+        <Property name="BaseLogFilePath">/home/pubsrv/logs/java/backend-picture-crawler</Property>
+        <Property name="RollingFileINFOLogFilePath">${BaseLogFilePath}/info.log</Property>
+        <Property name="RollingFileWARNLogFilePath">${BaseLogFilePath}/warn.log</Property>
+        <Property name="RollingFileERRORLogFilePath">${BaseLogFilePath}/error.log</Property>
+        <Property name="LogPattern">[%d{yyyy-MM-dd HH:mm:ss.SSS}] %5p [%t] %c{35}:%L - %m%n</Property>
+        <Property name="FileSizeThresold">100 MB</Property>
+        <Property name="LogFileDateSuffix">.%d{yyyy-MM-dd}</Property>
+    </Properties>
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LogPattern}"/>
+        </Console>
+        <RollingFile name="RollingFileINFO" fileName="${RollingFileINFOLogFilePath}"
+                     filePattern="${RollingFileINFOLogFilePath}${LogFileDateSuffix}">
+            <Filters>
+                <ThresholdFilter level="INFO"/>
+                <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout pattern="${LogPattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="${FileSizeThreshold}"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="RollingFileWARN" fileName="${RollingFileWARNLogFilePath}"
+                     filePattern="${RollingFileWARNLogFilePath}${LogFileDateSuffix}">
+            <Filters>
+                <ThresholdFilter level="WARN"/>
+                <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
+            </Filters>
+            <PatternLayout pattern="${LogPattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="${FileSizeThreshold}"/>
+            </Policies>
+        </RollingFile>
+        <RollingFile name="RollingFileERROR" fileName="${RollingFileERRORLogFilePath}"
+                     filePattern="${RollingFileERRORLogFilePath}${LogFileDateSuffix}">
+            <ThresholdFilter level="ERROR"/>
+            <PatternLayout pattern="${LogPattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="${FileSizeThreshold}"/>
+            </Policies>
+        </RollingFile>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="org.springframework" level="WARN"/>
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFileINFO"/>
+            <AppenderRef ref="RollingFileWARN"/>
+            <AppenderRef ref="RollingFileERROR"/>
+        </Root>
+    </Loggers>
+</Configuration>
